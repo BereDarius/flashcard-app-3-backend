@@ -6,6 +6,7 @@ import { CreateUserService } from './create/create-user.service';
 import { ReadUserService } from './read/read-user.service';
 import { UpdateUserService } from './update/update-user.service';
 import { DeleteUserService } from './delete/delete-user.service';
+import { ConflictException } from '@nestjs/common';
 
 @Resolver()
 export class UserResolver {
@@ -17,7 +18,15 @@ export class UserResolver {
   ) {}
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const userExists = await this.readUserService.checkIfUserExists(
+      createUserInput.email,
+    );
+
+    if (userExists) {
+      throw new ConflictException('User already exists');
+    }
+
     return this.createUserService.create(createUserInput);
   }
 

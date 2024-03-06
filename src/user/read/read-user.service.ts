@@ -9,6 +9,13 @@ export class ReadUserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
+  async checkIfUserExists(input: string): Promise<boolean> {
+    const user = await this.userRepository.findOne({
+      where: [{ email: input }, { username: input }],
+    });
+    return !!user;
+  }
+
   async findAll(): Promise<User[]> {
     return await this.userRepository.find();
   }
