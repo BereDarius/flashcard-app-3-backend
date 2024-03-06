@@ -33,7 +33,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.updateUserService.update(updateUserInput.id);
+    return this.updateUserService.update(updateUserInput);
   }
 
   @Mutation(() => User)

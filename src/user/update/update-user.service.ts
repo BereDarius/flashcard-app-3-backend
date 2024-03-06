@@ -10,8 +10,10 @@ export class UpdateUserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
-    await this.userRepository.update(id, updateUserInput);
-    return this.userRepository.findOne({ where: { id } });
+  async update(updateUserInput: UpdateUserInput): Promise<User> {
+    await this.userRepository.update(updateUserInput.id, updateUserInput);
+    return await this.userRepository.findOne({
+      where: { id: updateUserInput.id },
+    });
   }
 }
