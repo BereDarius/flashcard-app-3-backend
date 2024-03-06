@@ -9,8 +9,9 @@ export class DeleteUserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async remove(id: string): Promise<{ id: string }> {
+  async remove(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
     await this.userRepository.delete(id);
-    return { id };
+    return user;
   }
 }
